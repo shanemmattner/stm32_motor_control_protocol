@@ -1,33 +1,16 @@
 """Motor control commands for MCP protocol."""
 
-from st_mcp.commands.motor import (
-    MotorCommandType,
-    StartMotorCommand,
-    StopMotorCommand,
-    StopRampCommand,
-    StartStopCommand,
-    MotorControlMode,
-    SetControlModeCommand,
-)
-from st_mcp.commands.monitor import (
-    Monitor1Data,
-    Monitor2Data,
-    GetMonitor1Command,
-    GetMonitor2Command,
-    MonitoringSession,
+# Registry commands (new)
+from st_mcp.commands.registry import (
+    ReadRegisterCommand,
+    WriteRegisterCommand,
 )
 
+# Old motor and monitor commands (not yet refactored)
+# from st_mcp.commands.motor import (...)
+# from st_mcp.commands.monitor import (...)
+
 __all__ = [
-    "MotorCommandType",
-    "StartMotorCommand",
-    "StopMotorCommand",
-    "StopRampCommand",
-    "StartStopCommand",
-    "MotorControlMode",
-    "SetControlModeCommand",
-    "Monitor1Data",
-    "Monitor2Data",
-    "GetMonitor1Command",
-    "GetMonitor2Command",
-    "MonitoringSession",
+    "ReadRegisterCommand",
+    "WriteRegisterCommand",
 ]
