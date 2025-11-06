@@ -1,0 +1,6 @@
+# Bandit security checks configuration
+
+[bandit]
+# Skip certain test cases
+skips = B101  # assert_used in tests is fine
+exclude_dirs = [tests, .venv]

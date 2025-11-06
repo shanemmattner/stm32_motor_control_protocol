@@ -19,25 +19,65 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+pip-log.txt
+pip-delete-this-directory.txt
 
 # Virtual environments
 venv/
 env/
 ENV/
+.venv
+env.bak/
+venv.bak/
+.env
+.venv.prod
 
-# IDE
+# IDE & Editors
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+*.sublime-project
+*.sublime-workspace
+.vim/
+.emacs.d/
 
 # Test coverage
 .coverage
+.coverage.*
 htmlcov/
+.pytest_cache/
+.tox/
+.hypothesis/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
 # Logs (but keep serial traffic logs for protocol reference)
 *.log
 !serial_traffic_logs/
 !serial_traffic_logs/*.txt
+
+# uv
+uv.lock
+
+# Documentation
+site/
+docs/_build/
+docs/.build/
+
+# OS
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# Project specific
+*.hex
+*.elf
+*.axf
+.STM32CubeIDE/
+OpenOCD_logs/
