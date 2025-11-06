@@ -1,0 +1,86 @@
+
+- Motor Control Protocol Suite implements drive and monitor functionality
+- `Controller`: host PC or other mcu sending motor control commands
+- `Performer`: stm32 motor controller
+- ASPEP used as low level protocol that then feeds into the Motor Control Protocol that controls the motor
+- MCP requires the low level protocol have 2 independent communication channels
+    - Must specify which channel the data comes from when it reaches MCP
+- MCP does not provide message segmentation features, all data must be sent in one message
+- MCP designed to minimze the amount of computing power needed by performer to operate it
+- 4 services:
+    - `Command`: Controller sends command to Performer to execute.  performer returns a status and other data (ie START_MOTOR)
+    - `Registery`: Formalizes the access to the internal variables and state of Performer
+        - Registers let Controller read measurements, write run time parameters, or trigger actions
+        - ie `Ia` that monitors phase A current, `CONTROL_MODE` REGISTER, OR `speed_ramp` 
+    - `Datalog`: Lets Controller monitor chaning values of registers in a controlled way, and allows for plotting in real time
+    - `Notification`: Allows Controller to be notified when values of a set register change, ie `STATUS` register
+- `Command Service`
+    - 3 core commands for all MCP implementations:
+    - 1 user defined command
+    - Command indentified by `Command ID` and can have additional data
+    - Immediately executed by Performer adn return status + data
+    - Only 1 command can be pending at a time
+    - Command service uses ysnchronous channel of the lower level protocol: command and response messages are transferred on this channel
+    - Command format:
+        - 0-3 bits: Motor #
+            - 0 = all motors
+        - 3-16 bits: Command ID
+        - 16-(16+8*N): Command Payload
+    - Response message:
+        - N bytes: Response Payload
+        - N - N+8 bits: Status Code
+            - See table Table 1: Common MCP command status codes in documentation 
+- `Registry service`
+    - Registers are a way to provide application on the Controller side with variables, state, and other data
+    - `register identifier`
+        - 0-3 bites: motor #
+        - 3-6 bits: info on size of value of data element (8,16,132) 
+        - 6-16 bits: identifier: uniquely identify register of given type
+    - The full list of registers depends of the application and can change in time: new registers are added periodically to go with the evolution of the MCSDK
+- `Datalog service`
+    - periodic recording by Performer of values of a number of registers that are then trasnmitted to Controller
+    - Controler can configure the number of registers to record, their identifiers and sampling frequency
+    - recorded values are accumulated and sent by the performer to controller in a datalog message
+    - Datalog service uses an asynchronous channel of the low level protocol
+    - Datalog service is optional
+    - high freq registers recorded as 16bit values, medium frequency registers recorded as 32bit values
+    - timestamp field is 32bit counter incremented on high freq task execution
+        - can be used to detect if data is lost between 2 datalog messages
+    - Async Datalog ID field is set to 0, and identifies the message as a Datalog message
+    - `Mark` field identifies the configuration of the datalog service corresponding to the content of the Datalog message
+        - Value set by controller at configuration time, 8bit integer that can't be 0
+        - This value is useful when changing from one Datalog configuration to another
+            - ie Controller changes the Datalog service configuration
+- `ASPEP` (asymemetric serial packet exchange protocol)
+    - point to point protocol
+    - involves 2 Hosts, a Controller, and a Performer that exchange Packets
+    - Controller initiates the connection
+    - Performer is stm32 that only responds
+    - Packet made of `4 byte header` followed by a Payload
+        - Size of payload indicated in header
+    - First, the Controller initiates connection to the Performer
+        - purpose is to negotiate the values of a set of parameters that are needed for the connection to work, mainly maximum packet sizes and other protocol options
+    - 3 communication channels:
+        - `Synchronous`: mainly for sending commands from controller to performer
+            - Controller sends a DATA packet
+            - Performer sends back a RESPONSE packet
+        - `Asynchronous`: Allows Performer to send ASYNC packets
+            - used to send real-time data
+        - `Control`: used to establish and manage connection.  3 packets used are BEACON, PING, and ERROR
+            - Connection establishment procedure involves BEACON and PING
+            - Keep-alive feature uses PING packet
+            - Recovery procedure handles cases where transmission issues encountered.  Allows for recovering the synchronization and communication
+        - 3 channels are multiplexed over the serial link with different priorities: synchronous > control > asynchronous
+    - optional 16-bit CRC
+    - Packet structure:
+        - Header: 4 bytes
+            - 0-4 bits: type field
+                - BEACON
+                - PING
+                - ERROR
+                - REQUEST
+                - RESPONSE
+                - ASYNC
+            - 4-28 bits: header content
+            - 28-32 bits: CRCH
+                - CRC check computed on first 28 bits of the header

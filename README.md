@@ -1,2 +1,158 @@
-# stm32_motor_control_protocol
-mostly non-functional python scripts for st's motor control protocol
+# STM32 Motor Control Protocol (MCP)
+
+Python implementation of ST Microelectronics' Motor Control Protocol for STM32-based motor controllers. This project provides tools and utilities for communicating with STM32 ESCs (Electronic Speed Controllers) via serial over the ASPEP (Asymmetric Serial Packet Exchange Protocol).
+
+## Status
+
+**Work in Progress** - This project contains Python scripts for:
+- ✅ Serial communication with STM32 motor controllers
+- ✅ Motor start/stop commands
+- ✅ Basic velocity control
+- 🟡 Monitoring and data acquisition (partial)
+- ❌ Full registry service (not implemented)
+- ❌ Datalog service (not implemented)
+
+## Quick Start
+
+### Hardware Requirements
+- STM32G431-based ESC board
+- BLDC motor with hall sensors or encoder
+- 24V DC power supply
+- USB serial connection
+
+### Installation
+
+```bash
+pip install pyserial numpy
+```
+
+### Basic Usage
+
+```python
+from st_mcp.minimal_motor_control import MinimalMotorControl
+
+# Connect to motor controller
+controller = MinimalMotorControl(port="/dev/ttyACM0", baudrate=1843200)
+controller.run()
+```
+
+This will:
+1. Establish serial connection
+2. Perform beacon handshake
+3. Configure velocity mode
+4. Turn motor on
+
+Press Ctrl+C to stop and exit safely.
+
+## Project Structure
+
+```
+.
+├── st_mcp/
+│   ├── minimal_motor_control.py      # Working example script
+│   └── commands/
+│       ├── motor.py                  # Motor control commands
+│       └── monitor.py                # Real-time monitoring
+├── PROTOCOL_DOCUMENTATION.md         # Full project overview
+├── MCP_PROTOCOL_NOTES.md            # Protocol specification
+└── README.md                         # This file
+```
+
+## Motor Commands
+
+### Start/Stop
+```python
+from st_mcp.commands.motor import StartMotorCommand, StopMotorCommand
+
+# Start motor
+start_cmd = StartMotorCommand(motor_id=0)
+response = mcp.send_bytes(start_cmd.to_bytes())
+```
+
+### Control Modes
+- **Velocity Control**: Speed-based motor operation
+- **Torque Control**: Current-based motor operation
+
+### Real-Time Monitoring
+
+```python
+from st_mcp.commands.monitor import GetMonitor1Command, Monitor1Data
+
+# Get motor data
+monitor_cmd = GetMonitor1Command()
+response = mcp.send_bytes(monitor_cmd.to_bytes())
+data = monitor_cmd.parse_response(response)
+
+print(f"Speed: {data.speed} RPM")
+print(f"Torque: {data.torque} Nm")
+print(f"Temperature: {data.temperature}°C")
+```
+
+Available monitoring data:
+- **Monitor1**: Speed, torque, flux, bus voltage, temperature
+- **Monitor2**: Phase currents (Ia, Ib), D-Q currents, alpha-beta currents
+
+## Serial Communication
+
+All commands are sent over serial at **1,843,200 baud** using the ASPEP protocol:
+
+### Packet Structure
+```
+[Header: 4 bytes] [Payload: N bytes]
+```
+
+### Connection Sequence
+1. Send beacon: `55 FF FF 77`
+2. Receive beacon response
+3. Echo response back
+4. Receive confirmation
+5. Send connection request: `06 00 00 60`
+
+## Protocol Details
+
+### Motor Control Protocol (MCP)
+- 4 core services: Command, Registry, Datalog, Notification
+- Currently implements: Command Service only
+- Registry and Datalog services available in firmware but not yet exposed via Python
+
+### ASPEP (Asymmetric Serial Packet Exchange Protocol)
+- Point-to-point serial protocol
+- 3 communication channels: Synchronous, Asynchronous, Control
+- Optional 16-bit CRC checksum
+- Low-level transport for MCP
+
+See `MCP_PROTOCOL_NOTES.md` for full specification.
+
+## Serial Traffic Logs
+
+The original electronics repository contains recorded serial traffic from the Windows Motor Pilot application for reference:
+- Basic connect/disconnect sequence
+- Motor start with velocity control
+- Motor stop with ramp-down
+
+These are useful for protocol validation and reverse engineering.
+
+## Known Issues & Limitations
+
+1. **Registry Service**: Commands for reading/writing motor parameters not exposed
+2. **Datalog Service**: Real-time data logging configuration not implemented
+3. **Error Handling**: Limited error recovery in connection sequence
+4. **Testing**: No automated test suite (hardware-dependent)
+
+## Next Steps
+
+1. Implement Registry Service commands
+2. Implement Datalog Service with configurable sampling
+3. Add comprehensive error handling
+4. Create test harness with mock STM32 device
+5. Add parameter tuning utilities
+
+## References
+
+- ST Motor Control SDK (MCSDK) v6.3.1
+- STM32G431 Datasheet
+- ASPEP Protocol Specification
+
+## License
+
+See individual file headers for licensing information.
