@@ -166,7 +166,7 @@ These are useful for protocol validation and reverse engineering.
 ## References
 
 ### Official ST Microelectronics Documentation
-- [ST Motor Control SDK Community](https://community.st.com/t5/stm32-mcus-motor-control) - Official MCSDK support and documentation
+- [ST Motor Control SDK Community](https://community.st.com/t5/stm32-mcus-motor-control/bd-p/mcu-motor-control-forum) - Official MCSDK support and documentation
 - [STM32G431 Datasheet](https://www.st.com/resource/en/datasheet/stm32g431c6.pdf) - STM32G4 MCU specifications
 - [STM32G4 Reference Manual](https://www.st.com/resource/en/reference_manual/dm00355902-stm32g4-series-advanced-armbased-32bit-mcus-stmicroelectronics.pdf) - Register and peripheral details
 - [Motor Control SDK Documentation](https://www.st.com/en/development-tools/stm32cubemx.html) - STM32CubeMX with MCSDK
