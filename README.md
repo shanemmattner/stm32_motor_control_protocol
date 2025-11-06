@@ -165,32 +165,13 @@ These are useful for protocol validation and reverse engineering.
 
 ## References
 
-### Official ST Microelectronics Documentation
+### Official ST Motor Control Resources
 - [ST Motor Control SDK Community](https://community.st.com/t5/stm32-mcus-motor-control/bd-p/mcu-motor-control-forum) - Official MCSDK support and documentation
-- [STM32G431 Datasheet](https://www.st.com/resource/en/datasheet/stm32g431c6.pdf) - STM32G4 MCU specifications
-- [STM32G4 Reference Manual](https://www.st.com/resource/en/reference_manual/dm00355902-stm32g4-series-advanced-armbased-32bit-mcus-stmicroelectronics.pdf) - Register and peripheral details
-- [Motor Control SDK Documentation](https://www.st.com/en/development-tools/stm32cubemx.html) - STM32CubeMX with MCSDK
-- [ST Motor Workbench](https://www.st.com/en/development-tools/mcsdk.html) - Motor Control SDK tools
-- [MCSDK v6.3.1 Release Notes](https://www.st.com/en/embedded-software/stm32-mcu-mcsdk.html) - SDK version history and features
+- [ST Motor Workbench](https://www.st.com/en/development-tools/mcsdk.html) - Motor Control SDK tools and downloads
 
-### ARM CMSIS Documentation
-- [CMSIS Documentation](https://arm-software.github.io/CMSIS_5/General/html/index.html) - Cortex Microcontroller Software Interface Standard
-- [CMSIS-Core](https://arm-software.github.io/CMSIS_5/Core/html/index.html) - Core device abstraction
-- [ARM Cortex-M4 Programming Guide](https://developer.arm.com/documentation/dui0553/a) - M4 architecture reference
-
-### Protocol & Interface Documentation
-- [ASPEP Protocol Specification](https://www.st.com/content/ccc/resource/technical/document/application_note/58/ae/2e/f6/33/dc/4e/b2/CD00288121.PDF) - Asymmetric Serial Packet Exchange Protocol
-- [STM32 HAL Reference Manual](https://www.st.com/resource/en/user_manual/dm00122015-description-of-stm32l0-firmware-libraries-stmicroelectronics.pdf) - Hardware Abstraction Layer
-- [Universal Serial UART Guidelines](https://www.st.com/en/microcontrollers-microprocessors/stm32g4-series.html#documentation) - UART communication reference
-
-### Related Motor Control Resources
-- [Field-Oriented Control (FOC) Fundamentals](https://www.st.com/resource/en/design_tip/dm00179356-sinusoidal-pwm-modulation-for-motor-control-stmicroelectronics.pdf) - FOC theory and implementation
-- [BLDC Motor Control Guide](https://www.st.com/en/applications/industrial-control/brushless-dc-motor-bldc-control.html) - BLDC control techniques
-- [PWM and Motor Control](https://www.st.com/content/dam/AME/2014/white-paper/WL_211_Rev2_final.pdf) - PWM fundamentals for motor control
-
-### Project-Specific Documentation
-- `MCP_PROTOCOL_NOTES.md` - Detailed Motor Control Protocol specification extracted from firmware
-- `PROTOCOL_DOCUMENTATION.md` - Full project architecture and setup guide
+### Project Documentation
+- `MCP_PROTOCOL_NOTES.md` - Motor Control Protocol (MCP) specification
+- `PROTOCOL_DOCUMENTATION.md` - ASPEP protocol and project architecture
 
 ## License
 
