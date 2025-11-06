@@ -37,8 +37,7 @@ ENV/
 .coverage
 htmlcov/
 
-# Logs
+# Logs (but keep serial traffic logs for protocol reference)
 *.log
-
-# Serial traffic logs
-serial_traffic_logs/
+!serial_traffic_logs/
+!serial_traffic_logs/*.txt
