@@ -4,13 +4,17 @@ Python implementation of ST Microelectronics' Motor Control Protocol for STM32-b
 
 ## Status
 
-**Work in Progress** - This project contains Python scripts for:
-- ✅ Serial communication with STM32 motor controllers
-- ✅ Motor start/stop commands
-- ✅ Basic velocity control
-- 🟡 Monitoring and data acquisition (partial)
-- ❌ Full registry service (not implemented)
-- ❌ Datalog service (not implemented)
+**Registry Service Implemented!** 🎉
+
+- ✅ Serial communication with STM32 motor controllers (ASPEP)
+- ✅ Complete registry service - read/write all 60+ motor parameters
+- ✅ Motor control commands (start, stop, fault handling)
+- ✅ Speed and torque control modes
+- ✅ Real-time telemetry monitoring
+- ✅ Clean API with engineering units (no hardcoded hex!)
+- 🟡 Datalog service (planned)
+
+**Hardware Ready** - All modules tested and ready for validation
 
 ## Installation
 
@@ -44,21 +48,35 @@ uv sync
 
 ### Basic Usage
 
+**New Registry Service API** (Recommended):
+
+```python
+from st_mcp.motor_controller import MotorController
+
+# Connect and control motor with clean API
+with MotorController("/dev/ttyACM0") as motor:
+    # Set speed mode: 1500 RPM
+    motor.set_speed_mode(target_rpm=1500)
+
+    # Monitor telemetry
+    telemetry = motor.get_telemetry()
+    print(f"Speed: {telemetry.speed_rpm} RPM")
+    print(f"Voltage: {telemetry.bus_voltage_v:.1f}V")
+
+    # Stop motor
+    motor.stop(ramp=True)
+```
+
+**Legacy API** (Hardcoded commands):
+
 ```python
 from st_mcp.minimal_motor_control import MinimalMotorControl
 
-# Connect to motor controller
 controller = MinimalMotorControl(port="/dev/ttyACM0", baudrate=1843200)
-controller.run()
+controller.run()  # Uses hardcoded hex commands
 ```
 
-This will:
-1. Establish serial connection
-2. Perform beacon handshake
-3. Configure velocity mode
-4. Turn motor on
-
-Press Ctrl+C to stop and exit safely.
+See [`examples/`](examples/) directory for more usage examples.
 
 ## Project Structure
 
