@@ -1,0 +1,19 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include DEVELOPMENT.md
+include INFRASTRUCTURE.md
+include PUBLISHING.md
+include Makefile
+include .editorconfig
+include pyproject.toml
+
+recursive-include st_mcp *.py
+recursive-include tests *.py
+recursive-include serial_traffic_logs *.txt
+
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude .DS_Store
+global-exclude .git*

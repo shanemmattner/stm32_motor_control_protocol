@@ -12,6 +12,28 @@ Python implementation of ST Microelectronics' Motor Control Protocol for STM32-b
 - ❌ Full registry service (not implemented)
 - ❌ Datalog service (not implemented)
 
+## Installation
+
+### From PyPI (Recommended)
+
+```bash
+pip install stm32-motor-control-protocol
+```
+
+Or with uv (faster):
+
+```bash
+uv add stm32-motor-control-protocol
+```
+
+### From Source
+
+```bash
+git clone --recurse-submodules git@github.com:shanemmattner/stm32_motor_control_protocol.git
+cd stm32_motor_control_protocol
+uv sync
+```
+
 ## Quick Start
 
 ### Hardware Requirements
@@ -19,12 +41,6 @@ Python implementation of ST Microelectronics' Motor Control Protocol for STM32-b
 - BLDC motor with hall sensors or encoder
 - 24V DC power supply
 - USB serial connection
-
-### Installation
-
-```bash
-pip install pyserial numpy
-```
 
 ### Basic Usage
 
